@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\V1;
 
-use Illuminate\Support\Facades\Auth;
+use App\Exceptions\ActinidiaException;
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
     /**
      * Create a new AuthController instance.
      *
@@ -14,23 +19,39 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'confirm']]);
     }
 
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        $data = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ])->validate();
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if ( ! User::where('email', $data['email'])->exists()) {
+            error('Account not found.', 'KI-AUTH-0001');
         }
 
-        return $this->respondWithToken($token);
+        // TODO: send this link via email
+        return URL::temporarySignedRoute(
+            'confirm', now()->addMinutes(15), ['email' => $data['email']]
+        );
+
+//        if ( ! $token = auth()->attempt($credentials)) {
+//            return response()->json(['error' => 'Unauthorized'], 401);
+//        }
+//
+//        return $this->respondWithToken($token);
+    }
+
+    public function confirm(Request $request)
+    {
+        if ( ! $request->hasValidSignature()) {
+            error('Signature invalid or expired.', 'KI-AUTH-0002');
+        }
+
+        // TODO: login with the given email and return a jwt token
+        dd($request);
     }
 
     /**
@@ -68,7 +89,7 @@ class AuthController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param  string  $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -77,7 +98,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
 }

@@ -4,13 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Authentication
-Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', 'AuthController@login');
+Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
+    Route::post('login', 'AuthController@login')->name('login');
     Route::post('confirm', 'AuthController@confirm')->name('confirm');
-
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::post('refresh', 'AuthController@refresh')->name('refresh');
+    Route::post('logout', 'AuthController@logout')->name('logout');
+    Route::get('me', 'AuthController@me')->name('me');
 });
 
 Route::get('/users', function(Request $request){

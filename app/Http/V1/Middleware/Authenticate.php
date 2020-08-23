@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\V1\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
@@ -14,6 +14,6 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        abort(403);
+        error('Unauthenticated.', 'KI-AUTH-0006', [], 401);
     }
 }

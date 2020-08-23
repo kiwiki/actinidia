@@ -38,7 +38,7 @@ return [
     'guards' => [
         'api' => [
             'driver' => 'jwt',
-            'provider' => 'users',
+            'provider' => 'kiwiki',
         ],
     ],
 
@@ -62,6 +62,11 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
+            'model' => App\User::class,
+        ],
+
+        'kiwiki' => [
+            'driver' => 'kiwiki',
             'model' => App\User::class,
         ],
     ],

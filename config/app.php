@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Kiwiki'),
 
     /*
     |--------------------------------------------------------------------------
@@ -53,6 +53,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+
+    'domain' => env('APP_DOMAIN', 'api.kiwiki.test'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -165,7 +167,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        //
 
         /*
          * Application Service Providers...
@@ -228,5 +230,13 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+
+    /**
+     * Kiwiki stuff
+     */
+
+    // When true, the authentication cookie will require HTTPS. When developing
+    // on a local machine, it may be useful to set this to false.
+    'secure_cookie' => env('APP_SECURE_COOKIE', true)
 
 ];

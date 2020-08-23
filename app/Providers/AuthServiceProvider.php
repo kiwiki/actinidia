@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
+use App\Auth\KiwikiUserProvider;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        $this->app->auth->provider('kiwiki', function($app, $config){
+            return new KiwikiUserProvider($app['hash'], $config['model']);
+        });
     }
 }

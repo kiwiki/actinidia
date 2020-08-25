@@ -3,10 +3,13 @@
 namespace App\Http\V1\Controllers;
 
 use App\Http\V1\Resources\UserResource;
+use App\Mail\ConfirmationEmail;
 use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -19,6 +22,11 @@ class AuthController extends Controller
 {
 
     /**
+     * @var int The expiration time of confirmation signatures, in minutes.
+     */
+    public int $signatureExpires = 15;
+
+    /**
      * Create a new AuthController instance.
      *
      * @return void
@@ -26,6 +34,10 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'confirm', 'refresh']]);
+        $this->middleware('throttle:5,1,confirm', ['only' => ['confirm']]);
+        $this->middleware('throttle:5,1,login', ['only' => ['login']]);
+        $this->middleware('throttle:3,1,refresh', ['only' => ['refresh']]);
+        $this->middleware('throttle:60,1,default', ['only' => ['logout', 'me']]);
     }
 
     public function login(Request $request)
@@ -38,13 +50,29 @@ class AuthController extends Controller
             error('Account not found.', 'KI-AUTH-0001');
         }
 
-        // TODO: send this link via email
-        return URL::temporarySignedRoute('v1.auth.confirm', now()->addMinutes(15), ['email' => $data['email']]);
+        $code = mt_rand(100000, 999999);
+
+        $url = URL::temporarySignedRoute(
+            'v1.auth.confirm', now()->addMinutes($this->signatureExpires), [
+                'email' => $data['email'],
+                'code' => $code,
+            ]
+        );
+
+        $query = $this->getQueryFromUrl($url);
+
+        Mail::to($query->get('email'))->send(new ConfirmationEmail($url, $code));
+
+        return [
+            'signature' => $query->get('signature'),
+            'expires' => $query->get('expires'),
+            'email' => $query->get('email'),
+        ];
     }
 
     public function confirm(Request $request)
     {
-        if ( ! $request->hasValidSignature()) {
+        if ( ! $request->hasValidSignature() || $this->isSignatureExpired($request)) {
             error('Signature invalid or expired.', 'KI-AUTH-0002');
         }
 
@@ -59,6 +87,7 @@ class AuthController extends Controller
         $token = auth()->login($user);
 
         return $this->queueTokenCookie($token)
+                    ->expireSignature($request)
                     ->touchLoginTimestamp($user)
                     ->respondWithJson($token);
     }
@@ -152,5 +181,31 @@ class AuthController extends Controller
             'access_expires_in' => $accessTtl,
             'refresh_expires_in' => $refreshTtl,
         ]);
+    }
+
+    protected function getQueryFromUrl(string $url)
+    {
+        $collection = collect();
+        $query = explode('&', parse_url($url, PHP_URL_QUERY));
+
+        foreach ($query as $item) {
+            $data = explode('=', $item);
+
+            $collection->put($data[0], urldecode($data[1]));
+        }
+
+        return $collection;
+    }
+
+    protected function isSignatureExpired(Request $request)
+    {
+        return Cache::has("signature-{$request->query('signature')}");
+    }
+
+    protected function expireSignature(Request $request)
+    {
+        Cache::put("signature-{$request->query('signature')}", true, $this->signatureExpires * 60);
+
+        return $this;
     }
 }

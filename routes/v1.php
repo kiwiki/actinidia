@@ -12,9 +12,13 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::get('me', 'AuthController@me')->name('me');
 });
 
-Route::get('/users', function(Request $request){
-    return \App\User::all();
+Route::middleware(['auth:api', 'throttle:60,1,default'])->group(function(){
+    Route::get('/users', function(Request $request){
+        return \App\User::all();
+    });
 });
+
+
 
 Route::get('/', function (Request $request) {
     return 'assdasd';

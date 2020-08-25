@@ -27,6 +27,8 @@ services:
       SERVICE_NAME: mysql
     networks:
       - actinidia
+    volumes:
+      - mysql-data:/var/lib/mysql
 
   nginx:
     image: nginx:alpine
@@ -42,3 +44,6 @@ services:
 networks:
   actinidia:
     driver: bridge
+
+volumes:
+  mysql-data:

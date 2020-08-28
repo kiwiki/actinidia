@@ -46,10 +46,6 @@ class AuthController extends Controller
             'email' => 'required|email',
         ])->validate();
 
-        if ( ! User::where('email', $data['email'])->exists()) {
-            error('Account not found.', 'KI-AUTH-0001');
-        }
-
         $code = mt_rand(100000, 999999);
 
         $url = URL::temporarySignedRoute(
@@ -73,16 +69,12 @@ class AuthController extends Controller
     public function confirm(Request $request)
     {
         if ( ! $request->hasValidSignature() || $this->isSignatureExpired($request)) {
-            error('Signature invalid or expired.', 'KI-AUTH-0002');
+            error('Signature invalid or expired.', 'KI-AUTH-0001');
         }
 
-        try {
-            $user = User::query()
-                        ->where('email', $request->query('email'))
-                        ->firstOrFail();
-        } catch (ModelNotFoundException $exception) {
-            error('User not found. The account may have been deleted.', 'KI-AUTH-0003');
-        }
+        $user = User::query()
+                    ->where('email', $request->query('email'))
+                    ->firstOrCreate(['email' => $request->query('email')]);
 
         $token = auth()->login($user);
 
@@ -124,11 +116,11 @@ class AuthController extends Controller
         try {
             $token = auth()->refresh();
         } catch (TokenExpiredException $exception) {
-            error('Token missing or expired.', 'KI-AUTH-0004');
+            error('Token missing or expired.', 'KI-AUTH-0002');
         } catch (TokenInvalidException $exception) {
-            error('Invalid token.', 'KI-AUTH-0005');
+            error('Invalid token.', 'KI-AUTH-0003');
         } catch (JWTException $exception) {
-            error('Token missing or expired.', 'KI-AUTH-0004');
+            error('Token missing or expired.', 'KI-AUTH-0002');
         }
 
         $iat = JWTAuth::decode(new Token($token))->get('iat');

@@ -14,6 +14,6 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        error('Unauthenticated.', 'KI-AUTH-0006', [], 401);
+        error('Unauthenticated.', 'KI-AUTH-0004', [], 401);
     }
 }

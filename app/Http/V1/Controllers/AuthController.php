@@ -59,11 +59,11 @@ class AuthController extends Controller
 
         Mail::to($query->get('email'))->send(new ConfirmationEmail($url, $code));
 
-        return [
+        return response()->json([
             'signature' => $query->get('signature'),
             'expires' => $query->get('expires'),
             'email' => $query->get('email'),
-        ];
+        ]);
     }
 
     public function confirm(Request $request)
@@ -90,6 +90,17 @@ class AuthController extends Controller
     public function me()
     {
         return new UserResource(auth()->user());
+    }
+
+    public function check(Request $request)
+    {
+        $user = auth()->user();
+
+        $this->validate($request, [
+            'username' => "required|string|alpha_dash|max:32|unique:users,username,{$user->id}"
+        ]);
+
+        return response('');
     }
 
     public function update(Request $request)

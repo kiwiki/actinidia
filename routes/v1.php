@@ -11,6 +11,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('logout', 'AuthController@logout')->name('logout');
     Route::get('me', 'AuthController@me')->name('me');
     Route::patch('me', 'AuthController@update')->name('update');
+    Route::post('check', 'AuthController@check')->name('check');
 });
 
 Route::middleware(['auth:api', 'throttle:60,1,default'])->group(function(){

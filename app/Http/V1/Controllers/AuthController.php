@@ -92,6 +92,21 @@ class AuthController extends Controller
         return new UserResource(auth()->user());
     }
 
+    public function update(Request $request)
+    {
+        $user = auth()->user();
+
+        $data = $this->validate($request, [
+            'name' => 'required|string|max:100',
+            'username' => "required|string|alpha_dash|max:32|unique:users,username,{$user->id}"
+        ]);
+
+        $user->fill($data);
+        $user->save();
+
+        return new UserResource($user);
+    }
+
     /**
      * Log the user out (Invalidate the token).
      *
@@ -108,8 +123,6 @@ class AuthController extends Controller
 
     /**
      * Refresh a token.
-     *
-     * @noinspection PhpRedundantCatchClauseInspection
      */
     public function refresh()
     {

@@ -5,7 +5,6 @@ namespace App\Http\V1\Controllers;
 use App\Http\V1\Resources\UserResource;
 use App\Mail\ConfirmationEmail;
 use App\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
@@ -97,7 +96,7 @@ class AuthController extends Controller
         $user = auth()->user();
 
         $this->validate($request, [
-            'username' => "required|string|alpha_dash|max:32|unique:users,username,{$user->id}"
+            'username' => "required|string|alpha_dash|max:32|unique:users,username,{$user->id}",
         ]);
 
         return response('');
@@ -109,7 +108,7 @@ class AuthController extends Controller
 
         $data = $this->validate($request, [
             'name' => 'required|string|max:100',
-            'username' => "required|string|alpha_dash|max:32|unique:users,username,{$user->id}"
+            'username' => "required|string|alpha_dash|max:32|unique:users,username,{$user->id}",
         ]);
 
         $user->fill($data);
@@ -147,12 +146,19 @@ class AuthController extends Controller
             error('Token missing or expired.', 'KI-AUTH-0002');
         }
 
-        $iat = JWTAuth::decode(new Token($token))->get('iat');
+        $token = JWTAuth::decode(new Token($token));
+
+        $iat = $token->get('iat');
+
+        $user = $token->get('');
 
         $ttl = config('jwt.refresh_ttl') * 60 - (now()->unix() - $iat);
 
+        if ($user = auth()->user()) {
+            $this->touchLoginTimestamp($user);
+        }
+
         return $this->queueTokenCookie($token, $ttl / 60)
-                    ->touchLoginTimestamp(auth()->user())
                     ->respondWithJson($token, $ttl);
     }
 

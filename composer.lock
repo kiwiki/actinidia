@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f3e38e5e9125cedbe61f188e86cb1ba",
+    "content-hash": "b8f62195280774eb763d010874054abd",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -109,6 +109,84 @@
                 }
             ],
             "time": "2020-08-18T23:57:15+00:00"
+        },
+        {
+            "name": "cybercog/laravel-optimus",
+            "version": "3.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cybercog/laravel-optimus.git",
+                "reference": "6ed4d68aea63b07833d6a24efab1c5f27b1987c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cybercog/laravel-optimus/zipball/6ed4d68aea63b07833d6a24efab1c5f27b1987c6",
+                "reference": "6ed4d68aea63b07833d6a24efab1c5f27b1987c6",
+                "shasum": ""
+            },
+            "require": {
+                "graham-campbell/manager": "^4.0",
+                "illuminate/contracts": "^5.5|^6.0|^7.0",
+                "illuminate/support": "^5.5|^6.0|^7.0",
+                "jenssegers/optimus": "^0.2.2",
+                "php": "^7.1.3"
+            },
+            "require-dev": {
+                "graham-campbell/testbench": "^5.0",
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^6.5|^7.0|^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Cog\\Laravel\\Optimus\\Providers\\OptimusServiceProvider"
+                    ],
+                    "aliases": {
+                        "Optimus": "Cog\\Laravel\\Optimus\\Facades\\Optimus"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Cog\\Laravel\\Optimus\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Komarev",
+                    "email": "anton@komarev.com",
+                    "homepage": "https://komarev.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "An Optimus bridge for Laravel. Id obfuscation based on Knuth's multiplicative hashing method.",
+            "homepage": "https://komarev.com/sources/laravel-optimus",
+            "keywords": [
+                "cog",
+                "cybercog",
+                "decrypt",
+                "encrypt",
+                "hashids",
+                "id",
+                "laravel",
+                "obfuscate",
+                "optimus",
+                "public-id",
+                "uri",
+                "url"
+            ],
+            "funding": [
+                {
+                    "url": "https://paypal.me/antonkomarev",
+                    "type": "custom"
+                }
+            ],
+            "time": "2020-03-06T21:43:19+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -846,6 +924,71 @@
             "time": "2020-04-28T08:47:37+00:00"
         },
         {
+            "name": "graham-campbell/manager",
+            "version": "v4.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GrahamCampbell/Laravel-Manager.git",
+                "reference": "e18c29f98adb770bd890b6d66b27ba4730272599"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-Manager/zipball/e18c29f98adb770bd890b6d66b27ba4730272599",
+                "reference": "e18c29f98adb770bd890b6d66b27ba4730272599",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^5.5 || ^6.0 || ^7.0 || ^8.0",
+                "illuminate/support": "^5.5 || ^6.0 || ^7.0 || ^8.0",
+                "php": "^7.1.3 || ^8.0"
+            },
+            "require-dev": {
+                "graham-campbell/analyzer": "^2.4 || ^3.0",
+                "graham-campbell/testbench-core": "^3.2",
+                "mockery/mockery": "^1.3.1",
+                "phpunit/phpunit": "^6.5 || ^7.5 || ^8.4 || ^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GrahamCampbell\\Manager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com"
+                }
+            ],
+            "description": "Manager Provides Some Manager Functionality For Laravel",
+            "keywords": [
+                "Graham Campbell",
+                "GrahamCampbell",
+                "Laravel Manager",
+                "Laravel-Manager",
+                "connector",
+                "framework",
+                "interface",
+                "laravel",
+                "manager"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/graham-campbell/manager",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-07-25T18:02:52+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "6.5.5",
             "source": {
@@ -1033,6 +1176,63 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
+        },
+        {
+            "name": "jenssegers/optimus",
+            "version": "v0.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jenssegers/optimus.git",
+                "reference": "9bb0fcbaa3b7a6a0eb3e6c07e672ce4de42600af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jenssegers/optimus/zipball/9bb0fcbaa3b7a6a0eb3e6c07e672ce4de42600af",
+                "reference": "9bb0fcbaa3b7a6a0eb3e6c07e672ce4de42600af",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "kherge/box": "^2.7",
+                "phpseclib/phpseclib": "^2.0",
+                "phpunit/phpunit": "^4.0|^5.0",
+                "satooshi/php-coveralls": "^1.0",
+                "symfony/console": "^2.6|^3.0"
+            },
+            "suggest": {
+                "ext-gmp": "Required for 32bit systems"
+            },
+            "bin": [
+                "optimus"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jenssegers\\Optimus\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jens Segers",
+                    "homepage": "https://jenssegers.com"
+                }
+            ],
+            "description": "Id obfuscation based on Knuth's integer hash method",
+            "homepage": "https://github.com/jenssegers/optimus",
+            "keywords": [
+                "hashids",
+                "id obfuscation",
+                "ids",
+                "obfuscation",
+                "optimus"
+            ],
+            "time": "2017-04-21T10:14:58+00:00"
         },
         {
             "name": "laravel/framework",
@@ -6330,6 +6530,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2019-09-17T06:23:10+00:00"
         },
         {

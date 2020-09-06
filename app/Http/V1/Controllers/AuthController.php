@@ -32,7 +32,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'confirm', 'refresh']]);
+        $this->middleware('auth:api', ['except' => ['login', 'confirm', 'refresh', 'check']]);
         $this->middleware('throttle:5,1,confirm', ['only' => ['confirm']]);
         $this->middleware('throttle:5,1,login', ['only' => ['login']]);
         $this->middleware('throttle:3,1,refresh', ['only' => ['refresh']]);
@@ -146,11 +146,11 @@ class AuthController extends Controller
             error('Token missing or expired.', 'KI-AUTH-0002');
         }
 
-        $token = JWTAuth::decode(new Token($token));
+        $decoded = JWTAuth::decode(new Token($token));
 
-        $iat = $token->get('iat');
+        $iat = $decoded->get('iat');
 
-        $user = $token->get('');
+//        $user = $token->get('');
 
         $ttl = config('jwt.refresh_ttl') * 60 - (now()->unix() - $iat);
 

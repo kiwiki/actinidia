@@ -229,6 +229,10 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        # Application aliases
+
+        'Optimus' => Cog\Laravel\Optimus\Facades\Optimus::class,
+
     ],
 
     /**

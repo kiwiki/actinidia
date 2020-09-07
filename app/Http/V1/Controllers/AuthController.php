@@ -150,8 +150,6 @@ class AuthController extends Controller
 
         $iat = $decoded->get('iat');
 
-//        $user = $token->get('');
-
         $ttl = config('jwt.refresh_ttl') * 60 - (now()->unix() - $iat);
 
         if ($user = auth()->user()) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Cog\Laravel\Optimus\Facades\Optimus;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

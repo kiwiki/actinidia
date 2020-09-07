@@ -16,7 +16,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
 
 Route::middleware(['auth:api', 'throttle:60,1,default'])->group(function(){
     Route::get('/users', function(Request $request){
-        return \App\User::all();
+        return \App\Models\User::all();
     });
 });
 

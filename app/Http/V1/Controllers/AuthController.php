@@ -4,7 +4,7 @@ namespace App\Http\V1\Controllers;
 
 use App\Http\V1\Resources\UserResource;
 use App\Mail\ConfirmationEmail;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;

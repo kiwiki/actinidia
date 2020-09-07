@@ -2,7 +2,7 @@
 
 namespace App\Auth;
 
-use App\User;
+use App\Models\User;
 use Cog\Laravel\Optimus\Facades\Optimus;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\UserProvider;

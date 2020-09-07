@@ -32,7 +32,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'confirm', 'refresh', 'check']]);
+        $this->middleware('auth:api', ['except' => ['login', 'confirm', 'refresh']]);
         $this->middleware('throttle:5,1,confirm', ['only' => ['confirm']]);
         $this->middleware('throttle:5,1,login', ['only' => ['login']]);
         $this->middleware('throttle:3,1,refresh', ['only' => ['refresh']]);

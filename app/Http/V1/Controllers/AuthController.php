@@ -109,6 +109,7 @@ class AuthController extends Controller
         $data = $this->validate($request, [
             'name' => 'required|string|max:100',
             'username' => "required|string|alpha_dash|max:32|unique:users,username,{$user->id}",
+            'email' => "sometimes|required|email|unique:users,email,{$user->id}"
         ]);
 
         $user->fill($data);

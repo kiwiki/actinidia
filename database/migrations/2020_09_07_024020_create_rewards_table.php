@@ -17,6 +17,8 @@ class CreateRewardsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('rewarded_by')->nullable();
+            $table->foreign('rewarded_by')->references('id')->on('users')->onDelete('set null');
             $table->smallInteger('amount');
             $table->string('action');
             $table->unsignedBigInteger('rewardable_id')->nullable();

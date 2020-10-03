@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Cog\Laravel\Optimus\Facades\Optimus;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -23,6 +22,11 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'last_login_at' => 'datetime',
     ];
+
+    public function rewards()
+    {
+        return $this->hasMany(Reward::class);
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

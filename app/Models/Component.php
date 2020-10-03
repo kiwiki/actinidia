@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Component extends Model
 {
 
+    use SoftDeletes;
+
     public function revisions()
     {
-        return $this->morphMany(Revision::class, 'revisionable');
+        return $this->hasMany(ComponentRevision::class);
     }
 
     public function author()

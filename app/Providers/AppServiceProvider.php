@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+
     /**
      * Register any application services.
      *
@@ -16,6 +17,10 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isLocal()) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
+        }
+
+        if ( ! $this->app->isProduction()) {
+            $this->app->register(FakerServiceProvider::class);
         }
     }
 

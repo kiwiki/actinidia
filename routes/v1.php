@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\V1\Controllers\AuthController;
-use Illuminate\Http\Request;
+use App\Http\V1\Controllers\ComponentController;
 use Illuminate\Support\Facades\Route;
 
 // Authentication
@@ -15,13 +15,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('check', [AuthController::class, 'check'])->name('check');
 });
 
-Route::middleware(['auth:api', 'throttle:60,1,default'])->group(function () {
-    Route::get('/users', function (Request $request) {
-        return \App\Models\User::all();
-    });
-});
-
-
-Route::get('/', function (Request $request) {
-    return 'assdasd';
+Route::group(['middleware' => 'throttle:60,1,default'], function(){
+    // Components
+    Route::apiResource('components', ComponentController::class);
 });

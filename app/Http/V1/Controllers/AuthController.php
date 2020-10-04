@@ -102,7 +102,7 @@ class AuthController extends Controller
         return response('');
     }
 
-    public function update(Request $request)
+    public function  update(Request $request)
     {
         $user = auth()->user();
 

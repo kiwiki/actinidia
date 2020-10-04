@@ -61,16 +61,32 @@ class AuthTest extends TestCase
 
     public function testCheckAvailableUsername()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user)
              ->post('/v1/auth/check', ['username' => 'adalovelace'])
              ->assertOk();
     }
 
+    public function testCheckUnavailableUsername()
+    {
+        $doppelganger = User::factory()->create();
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+             ->post('/v1/auth/check', ['username' => $doppelganger->username])
+             ->assertJson([
+                 'error' => [
+                     'data' => [
+                         'username' => ['The username has already been taken.'],
+                     ],
+                 ],
+             ]);
+    }
+
     public function testUpdateUserDetails()
     {
-        $user = factory(User::class)->create(['email' => 'not@ada.com']);
+        $user = User::factory()->create(['email' => 'not@ada.com']);
 
         $this->actingAs($user)
              ->patch('/v1/auth/me', [
